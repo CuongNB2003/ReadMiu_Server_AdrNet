@@ -38,7 +38,7 @@ exports.list = async (req, res, next) => {
             let totalPage = Math.ceil(total / req.query.limit);
             if (req.query.page > totalPage) {
                 return res.status(203).json({
-                    msg: "Fail",
+                    msg: "Fail Load Data",
                 })
             }
 

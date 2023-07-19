@@ -44,7 +44,7 @@ exports.list = async (req, res, next) => {
             })
         }
         // load toàn bộ 
-        let list = await myDB.comicModel.find().populate('id_category')
+        let list = await myDB.comicModel.find()
         return res.status(200).json({
             msg: "Successful Data Comic",
             data: list
