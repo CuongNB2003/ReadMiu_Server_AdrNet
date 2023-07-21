@@ -8,7 +8,7 @@ const comicSchema = new DB.mongoose.Schema(
         writer_name     :   { type : String , require : true   },   // tên tác giả
         publishing_year :   { type : Number , require : true   },   // năm xuất bản
         cover_img       :   { type : String , require : false  },   // ảnh bìa
-        story_content   :   { type : String , require : false  },   // ds ảnh nd truyện
+        list_photo      :   { type : Array , require : false  },   // ds ảnh nd truyện
     },
     {
         collection : 'Tb_Comic'

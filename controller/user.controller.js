@@ -1,4 +1,5 @@
 var myDB = require('../models/user.model')
+var fs = require('fs')
 
 exports.listUser = async (req, res, next) => {
     let title = "Danh sách khách hàng"
@@ -7,17 +8,12 @@ exports.listUser = async (req, res, next) => {
     let dieuKienSapXep = null;
     //tìm kiếm
     if (req.query.fullname != '' && String(req.query.fullname) != 'undefined') {
-        dieuKienLoc = {fullname: { $regex: req.query.fullname } }
+        dieuKienLoc = { fullname: { $regex: req.query.fullname } }
     }
     // sắp xếp
     if (req.params.fullname != '0') {
         if (typeof (req.params.fullname) != 'undefined') {
             dieuKienSapXep = { fullname: Number(req.params.fullname) }
-        }
-    }
-    if (req.params.age != '0') {
-        if (typeof (req.params.age) != 'undefined') {
-            dieuKienSapXep = { age: Number(req.params.age) }
         }
     }
 
@@ -29,7 +25,45 @@ exports.listUser = async (req, res, next) => {
         listUser: listUser,
         name: req.query.name,
         sortName: req.params.fullname,
-        sortAge: req.params.age,
-        count : count,
+        count: count,
     });
+}
+
+exports.addUser = async (req, res, next) => {
+    let title = "Thêm User"
+    let msg = ""
+    if (req.method == "POST") {
+        let user = await myDB.userModel.findOne({username: req.body.username})
+        if (!user) {
+            if (req.body.password == req.body.passwordRe) {
+                let obj = new myDB.userModel()
+                obj.username = req.body.username
+                obj.password = req.body.password
+                obj.fullname = req.body.fullname
+                obj.email = req.body.email
+                obj.phone = req.body.phone
+                obj.acc_status = true
+                obj.role = false
+                try {
+                    if (req.file) {
+                        fs.renameSync(req.file.path, './public/avata_upload/' + req.file.originalname)
+                        obj.avata = '/avata_upload/' + req.file.originalname
+                    }
+                } catch (error) {
+                    console.log("================= Ảnh lỗi rồi m ơi: " + error.message);
+                }
+                try {
+                    await obj.save()
+                    res.redirect('/user')
+                } catch (error) {
+                    msg = "Lỗi ghi cơ sở dữ liệu " + error.message
+                }
+            }else{
+                msg = "Mật khẩu không trùng khớp"
+            }
+        }else{
+            msg = "Tài khoản đã tồn tại! vui lòng tạo tài khoản khác"
+        }
+    }
+    res.render('user/addUser', { title: title, msg: msg })
 }

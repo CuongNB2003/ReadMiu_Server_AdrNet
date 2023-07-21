@@ -39,8 +39,8 @@ exports.list = async (req, res, next) => {
                 })
             }
             return res.status(200).json({
-                data: [...data],
                 msg: "Successful Data Paging",
+                data: [...data],
             })
         }
         // load toàn bộ 
@@ -59,6 +59,39 @@ exports.list = async (req, res, next) => {
 
 }
 
+exports.detail = async (req, res, next) => {
+    try {
+        let detail = await myDB.comicModel.findById(req.params.id)
+        return res.status(200).json({
+            msg: "Load Detail Comic Successful",
+            data: detail
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: "Internal Server Error",
+        })
+    }
+}
+
+exports.read = async (req, res, next) => {
+    try {
+        let comic = await myDB.comicModel.findById(req.params.id)
+        let read = "";
+        // for(let i = 0; comic.list_photo.length < i; i++){
+        //     read = anh[i];
+        // }
+        return res.status(200).json({
+            msg: "Load Read Comic Successful",
+            data: read
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: "Internal Server Error",
+        })
+    }
+}
 exports.add = async (req, res, next) => {
     try {
         let obj = new myDB.comicModel()
