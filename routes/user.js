@@ -11,4 +11,7 @@ router.get('/sort-name/:fullname', userCtrl.listUser)
 router.get('/add', userCtrl.addUser);
 router.post('/add', uploadAvata.single("upload-avata"), userCtrl.addUser);
 
+router.get('/block-user/:idUser', userCtrl.blockUser)
+router.get('/unblock-user/:idUser', userCtrl.unBlockUser)
+
 module.exports = router;

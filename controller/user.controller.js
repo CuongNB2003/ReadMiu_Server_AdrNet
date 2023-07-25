@@ -23,7 +23,7 @@ exports.listUser = async (req, res, next) => {
     res.render('user/listUser', {
         title: title, msg: msg,
         listUser: listUser,
-        name: req.query.name,
+        name: req.query.fullname,
         sortName: req.params.fullname,
         count: count,
     });
@@ -66,4 +66,32 @@ exports.addUser = async (req, res, next) => {
         }
     }
     res.render('user/addUser', { title: title, msg: msg })
+}
+
+exports.blockUser = async (req, res, next) =>{
+    let id = req.params.idUser
+    let obj = await myDB.userModel.findById(id)
+    obj.acc_status = false;
+    try {
+        await myDB.userModel.findByIdAndUpdate(id, obj)
+        res.redirect('/user')
+    } catch (error) {
+        console.log(error);
+    }
+
+    res.render('user/listUser')
+}
+
+exports.unBlockUser = async (req, res, next) =>{
+    let id = req.params.idUser
+    let obj = await myDB.userModel.findById(id)
+    obj.acc_status = true;
+    try {
+        await myDB.userModel.findByIdAndUpdate(id, obj)
+        res.redirect('/user')
+    } catch (error) {
+        console.log(error);
+    }
+
+    res.render('user/listUser')
 }

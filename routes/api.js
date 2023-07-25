@@ -12,6 +12,7 @@ var uploadComic = multer({dest : './tmp'})
 //login
 router.post('/login', accountApi.login)
 router.post('/reg', accountApi.register)
+router.get('/info-user', accountApi.getInfoUser);
 
 //user 
 router.get('/user', userApi.list)
@@ -21,11 +22,11 @@ router.delete('/user/:id', userApi.delete)
 
 //comic 
 router.get('/comic', comicApi.list)
-router.get('/comic/detail/:id', comicApi.detail)
-router.get('/comic/read/:id', comicApi.read)
-router.post('/comic', uploadComic.single("upload-comic"), comicApi.add)
-router.put('/comic/:id', uploadComic.single("upload-comic"), comicApi.edit)
-router.delete('/comic/:id', comicApi.delete)
+router.get('/comic/:id/detail', comicApi.detail)
+router.get('/comic/:id/read', comicApi.read)
+router.post('/comic', uploadComic.fields([{name: "cover-img", maxCount: 1}, {name: "list-img"}]), comicApi.add)
+router.put('/comic/:id/edit', uploadComic.fields([{name: "cover-img", maxCount: 1}, {name: "list-img"}]), comicApi.edit)
+router.delete('/comic/:id/delete', comicApi.delete)
 
 //comment tốt
 router.get('/comment', commentApi.list)

@@ -34,7 +34,7 @@
                 <div class="container-fluid ms-3">
                     <form class="d-flex" role="search" action="/user/search/">
                         <input class="form-control me-2 boderBtn" type="search" placeholder="Search theo tên"
-                            aria-label="Search" style="width: 240px;" name="fullname">
+                            aria-label="Search" style="width: 240px;" name="fullname" value="<%= name %>">
                         <button class="btnCustom" type="submit" style="width: 120px;">Tìm kiếm</button>
                     </form>
                 </div>
@@ -66,13 +66,13 @@
                         <td class="text-center">
                             <%= listUser[i].fullname %>
                         </td>
-                        <th class="text-center d-none d-sm-table-cell">
+                        <td class="text-center d-none d-sm-table-cell">
                             <%= listUser[i].phone %>
-                        </th>
+                        </td>
     
-                        <th class="text-center d-none d-md-table-cell">
+                        <td class="text-center d-none d-md-table-cell">
                             <%= listUser[i].email %>
-                        </th>
+                        </td>
                         <!-- Chức năng khóa user -->
                         <% if(listUser[i].acc_status){ %>
                             <td class="text-center">
@@ -138,6 +138,9 @@
                     <% } %>
             </tbody>
         </table>
+        <div >
+            <span><%= msg %></span>
+        </div>
         <!-- Chia  -->
         <% let countV=1 %>
         <div class="row">

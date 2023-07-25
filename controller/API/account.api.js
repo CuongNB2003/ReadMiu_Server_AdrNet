@@ -10,7 +10,6 @@ exports.login = async (req, res, next) => {
             if (inforUser.password == req.query.password) {
                 checkLogin = true
                 return res.status(200).json({
-                    inforUser: inforUser,
                     msg: "Đăng nhập thành công",
                     checkLogin: checkLogin
                 })
@@ -24,6 +23,21 @@ exports.login = async (req, res, next) => {
         return res.status(203).json({
             msg: "Tài khoản không tồn tại",
             checkLogin: checkLogin
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: "Internal Server Error",
+        })
+    }
+}
+
+exports.getInfoUser = async (req, res, next) => {
+    try {
+        let checkLogin = false;
+        let inforUser = await myDB.userModel.findOne({ username: req.query.username });
+        return res.status(203).json({
+            data: inforUser
         })
     } catch (error) {
         console.log(error);
@@ -57,13 +71,12 @@ exports.register = async (req, res, next) => {
             let new_user = await obj.save()
             checkReg = true;
             return res.status(201).json({
-                msg: " Successful Add User",
+                msg: "Tạo tài khoản thành công",
                 checkReg: checkReg,
-                data: new_user
             })
         } else {
             return res.status(203).json({
-                msg: "Tài khoản đã tồn tại, vui lòng tạo tk khác",
+                msg: "Tài khoản đã tồn tại, vui lòng tạo tài khoản khác",
                 checkReg: checkReg
             })
         }

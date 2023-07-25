@@ -40,7 +40,7 @@ exports.list = async (req, res, next) => {
             }
             return res.status(200).json({
                 msg: "Successful Data Paging",
-                data: [...data],
+                data: data,
             })
         }
         // load toàn bộ 
@@ -78,9 +78,11 @@ exports.read = async (req, res, next) => {
     try {
         let comic = await myDB.comicModel.findById(req.params.id)
         let read = "";
-        // for(let i = 0; comic.list_photo.length < i; i++){
-        //     read = anh[i];
-        // }
+        console.log(comic.list_photo.length);
+        for(let i = 0; comic.list_photo.length < i; i++){
+            read = list_photo[i];
+            console.log("hehe: "+read);
+        }
         return res.status(200).json({
             msg: "Load Read Comic Successful",
             data: read
@@ -101,17 +103,30 @@ exports.add = async (req, res, next) => {
         obj.publishing_year = req.body.publishing_year
         obj.story_content = req.body.story_content
         try {
-            if (req.file) {
-                fs.renameSync(req.file.path, './public/comic_upload' + req.file.originalname)
-                obj.cover_img = '/comic_upload' + req.file.originalname
-            }
+            const images = req.files;
+            if(images){
+                for(let key in images){
+                   if(key == "cover-img"){
+                       images[key].forEach(element => {
+                           fs.renameSync(element.path,"./public/comic_upload/" + element.originalname);
+                           obj.cover_img = "/comic_upload/" + element.originalname
+                       });
+                   }
+                   else if (key =="list-img"){
+                       images[key].forEach(element => {
+                           fs.renameSync(element.path,"./public/comic_upload/" + element.originalname);
+                           let url = "/comic_upload/" + element.originalname
+                           obj.list_photo.push(url);
+                       });
+                   }
+                }
+             }
         } catch (error) {
             console.log("Lỗi đọc file " + error);
         }
         let new_prod = await obj.save()
         return res.status(201).json({
             msg: "Successful Add Product",
-            data: new_prod
         })
     } catch (error) {
         console.log(error);
@@ -126,10 +141,24 @@ exports.edit = async (req, res, next) => {
     try {
         let obj = await myDB.comicModel.findById(req.params.id)
         try {
-            if (req.file) {
-                fs.renameSync(req.file.path, './public/comic_upload/' + req.file.originalname)
-                obj.cover_img = '/comic_upload/' + req.file.originalname
-            }
+            const images = req.files;
+            if(images){
+                for(let key in images){
+                   if(key == "cover-img"){
+                       images[key].forEach(element => {
+                           fs.renameSync(element.path,"./public/comic_upload/" + element.originalname);
+                           obj.cover_img = "/comic_upload/" + element.originalname
+                       });
+                   }
+                   else if (key =="list-img"){
+                       images[key].forEach(element => {
+                           fs.renameSync(element.path,"./public/comic_upload/" + element.originalname);
+                           let url = "/comic_upload/" + element.originalname
+                           obj.list_photo.push(url);
+                       });
+                   }
+                }
+             }
         } catch (error) {
             console.log("Lỗi đọc file " + error);
         }
@@ -142,7 +171,6 @@ exports.edit = async (req, res, next) => {
         await myDB.comicModel.findByIdAndUpdate(req.params.id, obj)
         return res.status(200).json({
             msg: "Successful Edit Comic",
-            data: obj,
         })
     } catch (error) {
         console.log(error);

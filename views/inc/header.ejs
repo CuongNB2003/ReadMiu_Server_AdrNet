@@ -1,6 +1,6 @@
 <% var acHome='' ; var acComic='' ; var acUser='' ; var acChangeInfo='' ; var accChangePass='' ; if
     (typeof(title)=='undefined' ) { title='' ; } if(title !='' ){ if(title=="Trang chủ" ){ acHome='active' ; }else
-    if(title=="Danh sách truyện" ){ acComic='active' ; }else if(title=="Danh sách khách hàng" || title=="Thêm User" ){
+    if(title=="Danh sách truyện" || title=="Thêm truyện tranh" || title=="Chi tiết truyện"){ acComic='active' ; }else if(title=="Danh sách khách hàng" || title=="Thêm User" ){
     acUser='active' ; }else if(title=="Đổi thông tin" ){ acChangeInfo='active' ; }else if(title=='Đổi mật khẩu' ){
     accChangePass='active' ; } } %>
 

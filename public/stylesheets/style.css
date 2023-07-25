@@ -97,3 +97,9 @@
 .bg-thead {
     background-color: #ea5120;
 }
+
+.comment {
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

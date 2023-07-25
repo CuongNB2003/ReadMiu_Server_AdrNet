@@ -19,7 +19,7 @@ exports.list = async (req, res, next) => {
             })
         }
         // load toàn bộ
-        let list = await myDB.commentModel.find().populate('id_comic')
+        let list = await myDB.commentModel.find().populate('id_user')
         return res.status(200).json({
             msg: " Successful Data Comment",
             data: list

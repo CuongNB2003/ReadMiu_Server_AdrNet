@@ -1,7 +1,59 @@
 <%- include('../inc/header.ejs') %>
-<div class="card">
-    
-
+<div class="card boderCard">
+    <!-- Thêm sản phẩm -->
+    <span class="ms-4 titleCustom" ><%= title %></span>
+    <hr class="me-4 ms-4 hrCustom">
+    <div class="mt-2 row">
+        <form class="row" method="POST" enctype="multipart/form-data">
+            <!-- thêm nhân viên -->
+            <div class="col-12 row ms-2">
+                <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label formtext">Tên chuyện</label>
+                    <input name="username" type="text" class="form-control boderBtn" 
+                    id="inputEmail4" placeholder="Nhập tên chuyện" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label formtext">Ảnh bìa</label>
+                    <div class="input-group rounded-2">
+                        <input name="upload-comic" type="file" class="form-control boderBtn" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label formtext">Ảnh chuyện</label>
+                    <div class="input-group rounded-2">
+                        <input name="upload-comic" type="file" class="form-control boderBtn" required multiple>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputAddress" class="form-label formtext">Tên tác giả</label>
+                    <input name="password" type="password" class="form-control boderBtn" 
+                    id="inputAddress" placeholder="Nhập tên tác giả" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputAddress" class="form-label formtext">Năm xuất bản</label>
+                    <input name="passwordRe" type="password" class="form-control boderBtn" 
+                    id="inputAddress" placeholder="Nhập năm xuất bản" required>
+                </div>
+                <div class="col-md-12 mt-4">
+                    <div class="form-floating">
+                        <textarea name="detail" class="form-control boderBtn rounded-2"
+                        placeholder="Nhập mô tả sản phẩm" id="floatingTextarea2" style="height: 100px"
+                        required></textarea>
+                        <label class="ms-3" for="floatingTextarea2">Mô tả chuyện</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3 mb-5">
+                    <a href="/comic" ><Button class=" me-2 btnCustom" type="button">Hủy</Button></a>
+                    <button type="submit" class="btnCustom">Lưu</button>
+                </div>
+                <div class="col-md-6 mt-4">
+                    <p style="color: red; font-style: italic; font-size: 16px;">
+                        <%= msg %>
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <%- include('../inc/footer.ejs') %>
