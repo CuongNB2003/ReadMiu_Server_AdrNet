@@ -6,7 +6,7 @@ const comicSchema = new DB.mongoose.Schema(
         name            :   { type : String , require : true   },   // tên truyện
         story_desc      :   { type : String , require : false  },   // mô tả truyện
         writer_name     :   { type : String , require : true   },   // tên tác giả
-        publishing_year :   { type : Number , require : true   },   // năm xuất bản
+        publishing_year :   { type : String , require : true   },   // năm xuất bản
         cover_img       :   { type : String , require : false  },   // ảnh bìa
         list_photo      :   { type : Array , require : false  },   // ds ảnh nd truyện
     },
