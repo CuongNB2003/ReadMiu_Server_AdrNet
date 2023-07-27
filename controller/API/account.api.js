@@ -1,3 +1,4 @@
+const { log } = require('console');
 var myDB = require('../../models/user.model')
 var fs = require('fs')
 // const bcrypt = require('bcrypt');
@@ -34,7 +35,6 @@ exports.login = async (req, res, next) => {
 
 exports.getInfoUser = async (req, res, next) => {
     try {
-        let checkLogin = false;
         let inforUser = await myDB.userModel.findOne({ username: req.query.username });
         return res.status(203).json({
             data: inforUser
@@ -50,14 +50,11 @@ exports.getInfoUser = async (req, res, next) => {
 exports.register = async (req, res, next) => {
     try {
         let checkReg = false;
-        let checkUser = await myDB.userModel.findOne({ username: req.body.username })
-        let obj = new myDB.userModel(req.body)
-        if (!checkUser) {
-            obj.username = req.body.username
-            obj.password = req.body.password
-            obj.fullname = req.body.fullname
-            obj.email = req.body.email
-            obj.phone = req.body.phone
+        let user = await myDB.userModel.findOne({username: req.body.username})
+        console.log("log user "+ req.body.username);
+        if (!user) {
+            checkReg = true;
+            let obj = new myDB.userModel(req.body);
             obj.acc_status = true
             obj.role = false
             try {
@@ -68,10 +65,14 @@ exports.register = async (req, res, next) => {
             } catch (error) {
                 console.log("================= Ảnh lỗi rồi m ơi: " + error.message);
             }
-            let new_user = await obj.save()
-            checkReg = true;
+
+            try {
+                await obj.save()
+            } catch (error) {
+                console.log("Lỗi ghi cơ sở dữ liệu " + error.message);
+            }
             return res.status(201).json({
-                msg: "Tạo tài khoản thành công",
+                msg: " Successful Add User",
                 checkReg: checkReg,
             })
         } else {
@@ -80,6 +81,7 @@ exports.register = async (req, res, next) => {
                 checkReg: checkReg
             })
         }
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -87,6 +89,3 @@ exports.register = async (req, res, next) => {
         })
     }
 }
-
-
-

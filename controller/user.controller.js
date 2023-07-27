@@ -1,3 +1,4 @@
+const { log } = require('console');
 var myDB = require('../models/user.model')
 var fs = require('fs')
 
@@ -34,6 +35,7 @@ exports.addUser = async (req, res, next) => {
     let msg = ""
     if (req.method == "POST") {
         let user = await myDB.userModel.findOne({username: req.body.username})
+        console.log(user);
         if (!user) {
             if (req.body.password == req.body.passwordRe) {
                 let obj = new myDB.userModel()

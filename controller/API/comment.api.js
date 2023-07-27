@@ -14,12 +14,12 @@ exports.list = async (req, res, next) => {
                 })
             }
             return res.status(200).json({
-                data: [...data],
                 msg: "Successful Data Paging",
+                data: data,
             })
         }
         // load toàn bộ
-        let list = await myDB.commentModel.find().populate('id_user')
+        let list = await myDB.commentModel.find({ id_comic: req.query.id }).populate('id_user')
         return res.status(200).json({
             msg: " Successful Data Comment",
             data: list
@@ -36,16 +36,22 @@ exports.list = async (req, res, next) => {
 
 exports.add = async (req, res, next) => {
     try {
+        
         let obj = new myDB.commentModel()
         obj.id_user = req.body.id_user
         obj.id_comic = req.body.id_comic
         obj.cmt_content = req.body.cmt_content
-        obj.cmt_date = req.body.cmt_date
+        obj.cmt_date = Date.now()
 
-        let new_cate = await obj.save()
+        try {
+            await obj.save()
+        } catch (error) {
+            console.log("Lỗi ghi cơ sở dữ liệu " + error.message);
+        }
+
+        // let date = obj.cmt_date.toLocaleDateString('en-GB')
         return res.status(201).json({
             msg: " Successful Add Comment",
-            data: new_cate
         })
     } catch (error) {
         console.log(error);
@@ -63,7 +69,6 @@ exports.edit = async (req, res, next) => {
         await myDB.commentModel.findByIdAndUpdate(req.params.id, obj)
         return res.status(200).json({
             msg: " Successful Edit Comment",
-            data: obj,
         })
     } catch (error) {
         console.log(error);

@@ -68,12 +68,7 @@ exports.list = async (req, res, next) => {
 
 exports.add = async (req, res, next) => {
     try {
-        let obj = new myDB.userModel();
-        obj.username = req.body.username
-        obj.password = req.body.password
-        obj.fullname = req.body.fullname
-        obj.email = req.body.email
-        obj.phone = req.body.phone
+        let obj = new myDB.userModel(req.body);
         obj.acc_status = true
         obj.role = false
         try {

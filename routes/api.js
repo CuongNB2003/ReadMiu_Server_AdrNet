@@ -11,7 +11,7 @@ var uploadComic = multer({dest : './tmp'})
 
 //login
 router.post('/login', accountApi.login)
-router.post('/reg', accountApi.register)
+router.post('/reg', uploadAvata.single("upload-avata"), accountApi.register)
 router.get('/info-user', accountApi.getInfoUser);
 
 //user 

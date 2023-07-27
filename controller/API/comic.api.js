@@ -77,12 +77,7 @@ exports.detail = async (req, res, next) => {
 exports.read = async (req, res, next) => {
     try {
         let comic = await myDB.comicModel.findById(req.params.id)
-        let read = "";
-        console.log(comic.list_photo.length);
-        for(let i = 0; comic.list_photo.length < i; i++){
-            read = list_photo[i];
-            console.log("hehe: "+read);
-        }
+        let read = comic.list_photo
         return res.status(200).json({
             msg: "Load Read Comic Successful",
             data: read
@@ -114,8 +109,8 @@ exports.add = async (req, res, next) => {
                    }
                    else if (key =="list-img"){
                        images[key].forEach(element => {
-                           fs.renameSync(element.path,"./public/comic_upload/" + element.originalname);
-                           let url = "/comic_upload/" + element.originalname
+                           fs.renameSync(element.path,"./public/photo_upload/" + element.originalname);
+                           let url = "/photo_upload/" + element.originalname
                            obj.list_photo.push(url);
                        });
                    }
