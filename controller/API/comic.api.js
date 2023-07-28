@@ -91,12 +91,12 @@ exports.read = async (req, res, next) => {
 }
 exports.add = async (req, res, next) => {
     try {
-        let obj = new myDB.comicModel()
-        obj.name = req.body.name
-        obj.story_desc = req.body.story_desc
-        obj.writer_name = req.body.writer_name
-        obj.publishing_year = req.body.publishing_year
-        obj.story_content = req.body.story_content
+        let obj = new myDB.comicModel(req.body)
+        // obj.name = req.body.name
+        // obj.story_desc = req.body.story_desc
+        // obj.writer_name = req.body.writer_name
+        // obj.publishing_year = req.body.publishing_year
+        // obj.story_content = req.body.story_content
         try {
             const images = req.files;
             if(images){

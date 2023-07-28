@@ -37,10 +37,7 @@ exports.list = async (req, res, next) => {
 exports.add = async (req, res, next) => {
     try {
         
-        let obj = new myDB.commentModel()
-        obj.id_user = req.body.id_user
-        obj.id_comic = req.body.id_comic
-        obj.cmt_content = req.body.cmt_content
+        let obj = new myDB.commentModel(req.body)
         obj.cmt_date = Date.now()
 
         try {
@@ -51,7 +48,7 @@ exports.add = async (req, res, next) => {
 
         // let date = obj.cmt_date.toLocaleDateString('en-GB')
         return res.status(201).json({
-            msg: " Successful Add Comment",
+            msg: "Thêm thành công",
         })
     } catch (error) {
         console.log(error);
@@ -64,11 +61,11 @@ exports.add = async (req, res, next) => {
 exports.edit = async (req, res, next) => {
     try {
         let obj = await myDB.commentModel.findById(req.params.id)
-        obj.cmt_content = req.body.cmt_content
+        obj.cmt_content = req.query.cmt_new
 
         await myDB.commentModel.findByIdAndUpdate(req.params.id, obj)
         return res.status(200).json({
-            msg: " Successful Edit Comment",
+            msg: "Sửa thành công",
         })
     } catch (error) {
         console.log(error);
@@ -84,7 +81,7 @@ exports.delete = async (req, res, next) => {
     try {
         await myDB.commentModel.findByIdAndDelete(req.params.id)
         return res.status(200).json({
-            msg: " Successful Delete Comment",
+            msg: "Đã xóa comment",
         })
     } catch (error) {
         console.log(error);
