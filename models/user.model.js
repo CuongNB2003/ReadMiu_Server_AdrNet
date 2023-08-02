@@ -17,5 +17,16 @@ const userSchema = new DB.mongoose.Schema(
 )
 let userModel = DB.mongoose.model('userModel' , userSchema);
 
+const favoriteSchema = new DB.mongoose.Schema(
+    {
+        id_user  : { type : DB.mongoose.Schema.Types.ObjectId , ref : 'userModel' },
+        id_comic : { type : DB.mongoose.Schema.Types.ObjectId , ref : 'comicModel'},
+        favorite : { type : Boolean , require : false },  // nội dung cmt
+    },
+    {
+        collection : 'Tb_Favorite'
+    }
+)
+let favoriteModel = DB.mongoose.model('favoriteModel' , favoriteSchema);
 
-module.exports = {userModel,}
+module.exports = {userModel, favoriteModel}

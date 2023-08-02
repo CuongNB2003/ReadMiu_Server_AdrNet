@@ -3,21 +3,21 @@ var myDB = require('../../models/comic.model')
 exports.list = async (req, res, next) => {
     try {
         //api phân trang http://localhost:3000/comment?limit=&page=
-        if (req.query.limit && req.query.page) {
-            let skip = (req.query.page - 1) * req.query.limit;
-            let total = await myDB.commentModel.countDocuments();
-            let data = await myDB.commentModel.find().skip(skip).limit(req.query.limit);
-            let totalPage = Math.ceil(total / req.query.limit);
-            if (req.query.page > totalPage) {
-                return res.status(203).json({
-                    msg: "Fail Load Data",
-                })
-            }
-            return res.status(200).json({
-                msg: "Successful Data Paging",
-                data: data,
-            })
-        }
+        // if (req.query.limit && req.query.page) {
+        //     let skip = (req.query.page - 1) * req.query.limit;
+        //     let total = await myDB.commentModel.countDocuments();
+        //     let data = await myDB.commentModel.find().skip(skip).limit(req.query.limit);
+        //     let totalPage = Math.ceil(total / req.query.limit);
+        //     if (req.query.page > totalPage) {
+        //         return res.status(203).json({
+        //             msg: "Fail Load Data",
+        //         })
+        //     }
+        //     return res.status(200).json({
+        //         msg: "Successful Data Paging",
+        //         data: data,
+        //     })
+        // }
         // load toàn bộ
         let list = await myDB.commentModel.find({ id_comic: req.query.id }).populate('id_user')
         return res.status(200).json({

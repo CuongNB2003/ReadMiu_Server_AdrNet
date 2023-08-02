@@ -1,7 +1,6 @@
 var myDB = require('../../models/user.model')
 var fs = require('fs')
 const bcrypt = require('bcrypt');
-const { validationResult } = require('express-validator');
 
 exports.login = async (req, res, next) => {
     try {
@@ -161,7 +160,7 @@ exports.changePass = async (req, res, next) => {
         let checkChange = false;
         let errors = ""
         let userchange = req.query;
-         if (userReg.password == "") {
+         if (userchange.password == "") {
             error = "errNullPass"
             return res.status(203).json({
                 msg: "Không được để trống mật khẩu cũ",
@@ -169,7 +168,7 @@ exports.changePass = async (req, res, next) => {
                 error: error,
             })
         }
-        if (userReg.pass_new == "") {
+        if (userchange.pass_new == "") {
             error = "errNullPassNew"
             return res.status(203).json({
                 msg: "Không được để trống mật khẩu mới",
@@ -177,7 +176,7 @@ exports.changePass = async (req, res, next) => {
                 error: error,
             })
         }
-        if (userReg.pass_re == "") {
+        if (userchange.pass_re == "") {
             error = "errNullPhone"
             return res.status(203).json({
                 msg: "Bạn cần nhập lại mật khẩu mới",
@@ -185,12 +184,12 @@ exports.changePass = async (req, res, next) => {
                 error: error,
             })
         }
-        let user = await myDB.userModel.findOne({ _id: userchange.id });
+        let user = await myDB.userModel.findOne({ _id: req.params.id });
         const checkPass = await bcrypt.compare(userchange.password, user.password)
         if (checkPass) {
             if (userchange.pass_new == userchange.pass_re) {
                 checkChange = true;
-
+                // tạo obj lưu mật khẩu ở đây
 
                 return res.status(200).json({
                     msg: "Đổi mật khẩu thành công",

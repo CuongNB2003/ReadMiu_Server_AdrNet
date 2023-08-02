@@ -3,6 +3,9 @@
 /**
  * Module dependencies.
  */
+// cấu hình socket.io
+const socketapi = require('../socket_server');
+// ở dưới cùng còn
 
 var app = require('../app');
 var debug = require('debug')('readmiu-server-adrnet:server');
@@ -88,3 +91,6 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+// socket.io
+socketapi.io.attach(server);

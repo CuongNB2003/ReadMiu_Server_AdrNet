@@ -147,8 +147,8 @@ exports.edit = async (req, res, next) => {
                    }
                    else if (key =="list-img"){
                        images[key].forEach(element => {
-                           fs.renameSync(element.path,"./public/comic_upload/" + element.originalname);
-                           let url = "/comic_upload/" + element.originalname
+                           fs.renameSync(element.path,"./public/photo_upload/" + element.originalname);
+                           let url = "/photo_upload/" + element.originalname
                            obj.list_photo.push(url);
                        });
                    }

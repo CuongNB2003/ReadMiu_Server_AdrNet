@@ -4,18 +4,18 @@ var comicApi = require('../controller/API/comic.api')
 var commentApi = require('../controller/API/comment.api')
 var userApi = require('../controller/API/users.api')
 var accountApi = require('../controller/API/account.api')
+var favoriteApi = require('../controller/API/favorite.api')
 const multer = require('multer');
 var uploadAvata = multer({dest : './tmp'})
 var uploadComic = multer({dest : './tmp'})
-const { validate } = require('../middlewares/checkAcount');
 
 
 //login
 router.post('/login', accountApi.login)
 router.post('/reg', uploadAvata.single("upload-avata"), accountApi.register)
 router.get('/info-user', accountApi.getInfoUser);
-router.post('/change-pass', accountApi.changePass);
-router.get('change-info', accountApi.changeInfo);
+router.post('/change-pass/:id', accountApi.changePass);
+router.get('/change-info/:id', accountApi.changeInfo);
 
 //user 
 router.get('/user', userApi.list)
@@ -36,6 +36,12 @@ router.get('/comment', commentApi.list)
 router.post('/comment', commentApi.add)
 router.put('/comment/:id', commentApi.edit)
 router.delete('/comment/:id', commentApi.delete)
+
+//favorite 
+router.get('/favorite/:id', favoriteApi.list);
+router.post('/favorite', favoriteApi.add);
+router.delete('/favorite/:id', favoriteApi.delete);
+router.get('/favorite', favoriteApi.getOne);
 
 
 module.exports = router;
