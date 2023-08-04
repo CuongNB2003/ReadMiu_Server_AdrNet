@@ -1,5 +1,6 @@
 var myDB = require('../../models/comic.model')
 var fs = require('fs')
+var socket = require('../../socket_server');
 
 exports.list = async (req, res, next) => {
     try {
@@ -92,11 +93,6 @@ exports.read = async (req, res, next) => {
 exports.add = async (req, res, next) => {
     try {
         let obj = new myDB.comicModel(req.body)
-        // obj.name = req.body.name
-        // obj.story_desc = req.body.story_desc
-        // obj.writer_name = req.body.writer_name
-        // obj.publishing_year = req.body.publishing_year
-        // obj.story_content = req.body.story_content
         try {
             const images = req.files;
             if(images){
@@ -120,6 +116,7 @@ exports.add = async (req, res, next) => {
             console.log("Lỗi đọc file " + error);
         }
         let new_prod = await obj.save()
+        socket.io.emit("add comic", "Readmiu vừa thêm truyện mới "+ req.body.name)
         return res.status(201).json({
             msg: "Successful Add Product",
         })
