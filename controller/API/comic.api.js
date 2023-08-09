@@ -1,4 +1,5 @@
 var myDB = require('../../models/comic.model')
+var myDBFavorite = require('../../models/user.model')
 var fs = require('fs')
 var socket = require('../../socket_server');
 
@@ -63,9 +64,11 @@ exports.list = async (req, res, next) => {
 exports.detail = async (req, res, next) => {
     try {
         let detail = await myDB.comicModel.findById(req.params.id)
+        let favorite = await myDBFavorite.favoriteModel.find({id_comic: req.params.id}).countDocuments()
         return res.status(200).json({
             msg: "Load Detail Comic Successful",
-            data: detail
+            data: detail,
+            sum: favorite,
         })
     } catch (error) {
         console.log(error);
@@ -90,6 +93,7 @@ exports.read = async (req, res, next) => {
         })
     }
 }
+
 exports.add = async (req, res, next) => {
     try {
         let obj = new myDB.comicModel(req.body)

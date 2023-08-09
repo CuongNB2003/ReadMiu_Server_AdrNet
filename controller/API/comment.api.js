@@ -1,4 +1,7 @@
 var myDB = require('../../models/comic.model')
+var myDBUser = require('../../models/user.model')
+var socket = require('../../socket_server');
+
 
 exports.list = async (req, res, next) => {
     try {
@@ -39,14 +42,12 @@ exports.add = async (req, res, next) => {
         
         let obj = new myDB.commentModel(req.body)
         obj.cmt_date = Date.now()
-
-        try {
-            await obj.save()
-        } catch (error) {
-            console.log("Lỗi ghi cơ sở dữ liệu " + error.message);
-        }
-
-        // let date = obj.cmt_date.toLocaleDateString('en-GB')
+        await obj.save()
+        let user = await myDBUser.userModel.findById(req.body.id_user);
+        let comic = await myDB.comicModel.findById(req.body.id_comic);
+        let fullname = user.fullname;
+        let name = comic.name;
+        socket.io.emit("add comment", fullname+" vừa bình luận vào truyện "+name)
         return res.status(201).json({
             msg: "Thêm thành công",
         })

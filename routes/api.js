@@ -15,7 +15,7 @@ router.post('/login', accountApi.login)
 router.post('/reg', uploadAvata.single("upload-avata"), accountApi.register)
 router.get('/info-user', accountApi.getInfoUser);
 router.post('/change-pass/:id', accountApi.changePass);
-router.get('/change-info/:id', accountApi.changeInfo);
+router.post('/change-info/:id', accountApi.changeInfo);
 
 //user 
 router.get('/user', userApi.list)

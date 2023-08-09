@@ -20,10 +20,10 @@ io.on("connection", (client) => {
 
 
     //sự kiện người dùng gửi tin nhắn lên
-    client.on("user comments", (data) =>{
+    client.on("add comment", (data) =>{
         console.log("dữ liệu nè "+data);
         // gửi thông báo cho mọi người 
-        io.sockets.emit('user comments', data);
+        io.sockets.emit('add comment', z);
     })
     //sự kiện người dùng gửi tin nhắn lên
     client.on("add comic", () =>{ })

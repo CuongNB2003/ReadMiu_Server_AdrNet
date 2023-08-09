@@ -157,58 +157,61 @@ exports.register = async (req, res, next) => {
 
 exports.changePass = async (req, res, next) => {
     try {
-        let checkChange = false;
+        let checkChangePass = false;
         let errors = ""
         let userchange = req.query;
-         if (userchange.password == "") {
-            error = "errNullPass"
+         if (userchange.pass == "") {
+            errors = "errNullPass"
             return res.status(203).json({
                 msg: "Không được để trống mật khẩu cũ",
-                checkStatus: checkReg,
-                error: error,
+                checkStatus: checkChangePass,
+                error: errors,
             })
         }
         if (userchange.pass_new == "") {
-            error = "errNullPassNew"
+            errors = "errNullPassNew"
             return res.status(203).json({
                 msg: "Không được để trống mật khẩu mới",
-                checkStatus: checkReg,
-                error: error,
+                checkStatus: checkChangePass,
+                error: errors,
             })
         }
         if (userchange.pass_re == "") {
-            error = "errNullPhone"
+            errors = "errNullPassRe"
             return res.status(203).json({
                 msg: "Bạn cần nhập lại mật khẩu mới",
-                checkStatus: checkReg,
-                error: error,
+                checkStatus: checkChangePass,
+                error: errors,
             })
         }
-        let user = await myDB.userModel.findOne({ _id: req.params.id });
-        const checkPass = await bcrypt.compare(userchange.password, user.password)
+        let user = await myDB.userModel.findById(req.params.id)
+        const checkPass = await bcrypt.compare(userchange.pass, user.password)
         if (checkPass) {
             if (userchange.pass_new == userchange.pass_re) {
-                checkChange = true;
+                checkChangePass = true;
                 // tạo obj lưu mật khẩu ở đây
-
+                const salt = await bcrypt.genSalt(10);
+                // mã hóa mk
+                user.password = await bcrypt.hash(userchange.pass_new, salt);
+                await myDB.userModel.findByIdAndUpdate(req.params.id, user)
                 return res.status(200).json({
                     msg: "Đổi mật khẩu thành công",
-                    checkStatus: checkChange,
+                    checkStatus: checkChangePass,
                     error: errors,
                 })
             } else {
-                errors = "errNotP"
+                errors = "errNotPass"
                 return res.status(203).json({
                     msg: "Mật khẩu mới không trùng khớp",
-                    checkStatus: checkChange,
+                    checkStatus: checkChangePass,
                     error: errors,
                 })
             }
         } else {
-            errors = "errNotP"
+            errors = "errNotPassErr"
             return res.status(203).json({
                 msg: "Mật khẩu cũ sai",
-                checkStatus: checkChange,
+                checkStatus: checkChangePass,
                 error: errors,
             })
         }
@@ -222,10 +225,44 @@ exports.changePass = async (req, res, next) => {
 
 exports.changeInfo = async (req, res, next) => {
     try {
-        let user = await myDB.userModel.findOne({ username: req.query.username });
-
-        return res.status(203).json({
-            data: inforUser
+        let checkChangeInfo = false;
+        let errors = ""
+        let changeinfo = req.query;
+         if (changeinfo.fullname == "") {
+            errors = "errNullFullname"
+            return res.status(203).json({
+                msg: "Không được để trống họ và tên",
+                checkStatus: checkChangeInfo,
+                error: errors,
+            })
+        }
+        if (changeinfo.email == "") {
+            errors = "errNullEmail"
+            return res.status(203).json({
+                msg: "Không được để trống email",
+                checkStatus: checkChangeInfo,
+                error: errors,
+            })
+        }
+        if (changeinfo.phone == "") {
+            errors = "errNullPhone"
+            return res.status(203).json({
+                msg: "Không được để trống số điện thoại",
+                checkStatus: checkChangeInfo,
+                error: errors,
+            })
+        }
+        
+        let user = await myDB.userModel.findById(req.params.id)
+        user.fullname = changeinfo.fullname;
+        user.email = changeinfo.email;
+        user.phone = changeinfo.phone;
+        checkChangeInfo = true;
+        await myDB.userModel.findByIdAndUpdate(req.params.id, user)
+        return res.status(200).json({
+            msg: "Sửa thành công",
+            checkStatus: checkChangeInfo,
+            error: "",
         })
     } catch (error) {
         console.log(error);
